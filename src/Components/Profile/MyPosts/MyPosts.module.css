@@ -1,0 +1,12 @@
+textarea {
+    width: 1000px;
+    height: 50px;
+}
+
+button {
+    display: block;
+}
+
+.posts p {
+    text-align: center;
+}
