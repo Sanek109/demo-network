@@ -9,9 +9,6 @@ const maxLength50 = maxLengthCreator(50)
 
 const MyPosts = React.memo (props => {
 
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return nextProps != this.props  || nextState != this.state;
-    // }
     let postsElements = props.profileReducer.postsData.map((el, key) => <MyPost post={el.post}
                                                                                 likeCount={el.likeCount}
                                                                                 key={key}/>)

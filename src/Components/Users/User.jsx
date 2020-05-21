@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Users.module.css';
-import userPhoto from '../../assets/images/prisoner_PNG27.png';
+import userPhoto from '../../assets/images/avatarPhoto.png';
 import {NavLink} from 'react-router-dom';
 
 

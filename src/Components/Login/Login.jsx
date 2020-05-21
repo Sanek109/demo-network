@@ -1,5 +1,5 @@
 import React from 'react';
-import {Field, reduxForm} from 'redux-form';
+import {reduxForm} from 'redux-form';
 import {Input, createField} from "../common/formsControls/FormControls";
 import {maxLengthCreator, required} from "../utils/validators/validators";
 import {connect} from "react-redux";
@@ -9,12 +9,16 @@ import style from '../common/formsControls/FormControl.module.css';
 
 const maxLength30 = maxLengthCreator(30)
 
-const LoginForm = ({handleSubmit, error}) => {
+const LoginForm = ({handleSubmit, error, captchaUrl}) => {
     return (<form onSubmit={handleSubmit}>
-            {createField('Login', 'email', Input, [required, maxLength30])}
-            {createField('Password', 'password', Input, [required, maxLength30], 'password')}
-            {createField(null, 'remember Me', Input, null, 'checkbox', 'RememberMe')}
-        { error && <div className={style.formSummaryError}>
+        {createField('Login', 'email', Input, [required, maxLength30])}
+        {createField('Password', 'password', Input, [required, maxLength30], 'password')}
+        {createField(null, 'remember Me', Input, null, 'checkbox', 'RememberMe')}
+
+        {captchaUrl && <img src={captchaUrl} />}
+        {captchaUrl && (createField('Symbols from image', 'captcha', Input, [required], {}))}
+
+        {error && <div className={style.formSummaryError}>
             {error}
         </div>}
         <div>
@@ -30,19 +34,20 @@ const LoginReduxForm = reduxForm({
 const Login = (props) => {
 
     const onSubmit = (formData) => {
-        props.login(formData.email, formData.password, formData.remeberMe)
+        props.login(formData.email, formData.password, formData.remeberMe, formData.captcha)
     }
-    if(props.isAuth) {
-        return <Redirect to={'/profile'} />
+    if (props.isAuth) {
+        return <Redirect to={'/profile'}/>
     }
     return (<div>
         <h1>Login</h1>
-        <LoginReduxForm onSubmit={onSubmit} />
+        <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl}/>
     </div>)
 }
 
 let mapStateToProps = (state) => {
     return {
+        captchaUrl: state.authReducer.captchaUrl,
         isAuth: state.authReducer.isAuth
     }
 }

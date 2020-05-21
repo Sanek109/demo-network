@@ -5,32 +5,48 @@ import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 import avatarPhoto from '../../../assets/images/avatarPhoto.png';
 
 
-const ProfileInfo = (props) => {
-    if (!props.profile) {
+const ProfileInfo = ({profile, isOwner, status, updateStatus, savePhoto}) => {
+    if (!profile) {
         return <Preloader />
+    }
+
+    const onMainPhotoSelected = (e) => {
+        if(e.target.files.length) {
+            savePhoto(e.target.files[0])
+        }
     }
 
     return (
         <div>
-            {/*<div className={classes.img}>*/}
-            {/*    <img src='https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-prisoner-cartoon-background-in-dark-prison-corner-crime-image_66770.jpg' />*/}
-            {/*</div>*/}
             <div className={classes.profile}>
                 <div className={classes.avatar}>
-                    <img src={props.profile.photos.large != null ? props.profile.photos.large : avatarPhoto} />
-                    <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus} />
+                    {isOwner && <input type={'file'} onChange={onMainPhotoSelected} />}
+                    <img src={profile.photos.large || avatarPhoto} />
+                    <ProfileStatusWithHooks status={status} updateStatus={updateStatus} />
                 </div>
                 <div className={classes.discription}>
-                    <h4>Alex Moren</h4>
+                    <h4>{profile.fullName}</h4>
                     <div className={classes.info}>
-                        <p>Date if Birth: 3 april 1993</p>
-                        <p>City: Bobruisk</p>
-                        <p>Education: High School</p>
-                        <p>Web site: няма</p>
+                        <div>
+                            <b>Looking for a job:</b> {profile.lookingForAJob ? 'Yes!' : 'No!' }
+                        </div>
+                        {profile.lookingForAJob && <div>
+                            <b>My professional skills:</b> {profile.lookingForAJobDescription}
+                        </div>}
+                        <div>
+                            <b>Contacts</b>: {Object.keys(profile.contacts).map(key => {
+                            return <Contact  key={key} contactTitle={key} contactValue={profile.contacts[key]} />
+                        })}</div>
                     </div>
                 </div>
             </div>
         </div>
+    )
+}
+
+const Contact = ({contactTitle, contactValue}) => {
+    return (
+        <div className={classes.contact}><b>{contactTitle}</b>: {contactValue}</div>
     )
 }
 

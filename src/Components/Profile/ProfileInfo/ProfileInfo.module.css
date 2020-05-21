@@ -9,11 +9,11 @@
     height: 150px;
 }
 
-.discription .info {
-    line-height: 2px;
-}
-
 .img img {
     width: 100%;
     height: 200px;
+}
+
+.contact {
+    padding-left: 15px;
 }
